@@ -2,31 +2,49 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# -- Configure the cronjob schedule
 schedule: "*/5 * * * *"
+
+# -- Context used to set hostname for backup
 context: context-tag
+# -- name of the chart (used to select pod)
 chartSelector: wordpress
+# -- name of the chart release (used to select pod)
 chartReleaseSelector: my_site_release
+# -- Suspend cronjob
 suspend: false
+# -- image used for kubectl command
 image:
+  # -- repo of image used for kubectl command
   repository: bitnami/kubectl
+  # -- pullPolicy of image used for kubectl command
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
+  # -- tag of image used for kubectl command
   tag: ""
+# Configure the restic command
 restic:
+  # -- bzip2 download url to extract restic binary
   bunzip2DownloadUrl: https://busybox.net/downloads/binaries/1.35.0-x86_64-linux-musl/busybox_BUNZIP2
+  # -- restic download url to install binary if not present
   downloadUrl: https://github.com/restic/restic/releases/download/v0.13.1/restic_0.13.1_linux_amd64.bz2
+  # -- repo location of restic backup
   repository: s3:s3.amazonaws.com/bucket_name/restic
+  # -- password of restic backup
   password: restic-password
+  # -- s3 config access for restic backup
   awsAccessKeyId: AWS_ACCESS_KEY_ID
+  # -- s3 config access for restic backup
   awsSecretAccessKey: AWS_SECRET_ACCESS_KEY
+  # -- restic forget options
   forgetOptions: "--keep-last 7 --keep-weekly 5 --prune"
-# exemple for bitnami wordpress chart exclude updraft
+  # -- restic backup options
   backupOptions: "--exclude=/bitnami/wordpress/bin --exclude=/bitnami/wordpress/wp-content/updraft/ /bitnami/wordpress"
 
-# exemple for bitnami wordpress chart backup sql database
+# -- script executed before backup (do not forget \ before $ if bash variables used)
 beforeBackupScript: |-
  export DATE=$(date +'%m-%d-%Y-%H_%M')
  wp db export "/bitnami/wordpress/"\$DATE".sql"
+# -- script executed after backup (do not forget \ before $ if bash variables used)
 afterBackupScript: |-
  rm "/bitnami/wordpress/"\$DATE".sql"
 imagePullSecrets: []
@@ -34,11 +52,11 @@ nameOverride: ""
 fullnameOverride: ""
 
 serviceAccount:
-  # Specifies whether a service account should be created
+  # -- Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
+  # -- Annotations to add to the service account
   annotations: {}
-  # The name of the service account to use.
+  # -- The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
@@ -48,7 +66,7 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
+  # -- capabilities:
   #   drop:
   #   - ALL
   # readOnlyRootFilesystem: true
@@ -56,7 +74,7 @@ securityContext: {}
   # runAsUser: 1000
 
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
+  # -- We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.

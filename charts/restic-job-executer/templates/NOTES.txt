@@ -1,5 +1,21 @@
-
 BackupJob-created
+-----------------
 
-check pod: 
-    kubectl get pods -o jsonpath='{.items[0].metadata.name}') --selector app.kubernetes.io/instance={{.Values.chartReleaseSelector}},app.kubernetes.io/name={{.Values.chartSelector}}
+the following commands
+
+~~~
+{{- .Values.beforeBackupScript | nindent 0 }}
+restic backup --host {{  .Values.chartReleaseSelector }}-$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)-{{.Values.context}} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}
+{{- .Values.afterBackupScript | nindent 0 }}
+restic forget {{ .Values.restic.forgetOptions }} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}
+restic snapshots
+echo "ok"
+~~~
+
+will be executed every: "{{ .Values.schedule }}"
+
+
+in this pod:
+~~~
+kubectl get pods -o jsonpath='{.items[0].metadata.name}' --selector app.kubernetes.io/instance={{.Values.chartReleaseSelector}},app.kubernetes.io/name={{.Values.chartSelector}}
+~~~
