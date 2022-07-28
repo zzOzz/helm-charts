@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "job-executer.fullname" . }}
+  labels:
+    {{- include "job-executer.labels" . | nindent 4 }}
+spec:
+  schedule: "{{ .Values.schedule }}"
+  suspend: {{ .Values.suspend }}
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: {{ include "job-executer.fullname" . }}
+          labels:
+          {{- include "job-executer.labels" . | nindent 12 }}
+        spec:
+          restartPolicy: Never
+          {{- with .Values.imagePullSecrets }}
+          imagePullSecrets:
+          {{- toYaml . | nindent 16 }}
+          {{- end }}
+          serviceAccountName: {{ include "job-executer.serviceAccountName" . }}
+          securityContext:
+          {{- toYaml .Values.podSecurityContext | nindent 16 }}
+          containers:
+          - name: {{ .Chart.Name }}
+            securityContext:
+              {{- toYaml .Values.securityContext | nindent 16 }}
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            command:
+            - /bin/bash
+            args:
+            - -c
+            - echo "bash -c \"export $(echo $ENVFILE|grep -v '^#'| xargs); $(JOB_SCRIPT)\"" |sed -z 's/\n/;/g' > /tmp/command.sh && cat /tmp/command.sh | xargs kubectl exec $(kubectl get pods --selector=$SELECTOR -o jsonpath='{.items[0].metadata.name}') --
+            env:
+            - name: SELECTOR
+              value: app.kubernetes.io/instance={{.Values.chartReleaseSelector}},app.kubernetes.io/name={{.Values.chartSelector}}
+            - name: ENVFILE
+              value: |-
+                CONTEXT={{.Values.context}}
+                RESTIC_PASSWORD={{.Values.restic.password}}
+                RESTIC_REPOSITORY={{.Values.restic.repository}}
+                RESTIC_CACHE_DIR=/tmp/restic
+                AWS_ACCESS_KEY_ID={{.Values.restic.awsAccessKeyId}}
+                AWS_SECRET_ACCESS_KEY={{.Values.restic.awsSecretAccessKey}}
+            - name: JOB_SCRIPT
+              value: |-
+                export PATH=\$PATH:/tmp/bin 
+                type -P restic || ( mkdir -p /tmp/bin && curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} && chmod +x /tmp/bin/bunzip2 && curl -L {{.Values.restic.downloadUrl}} -o - | /tmp/bin/bunzip2 > /tmp/bin/restic && chmod +x /tmp/bin/restic )
+                {{- .Values.beforeBackupScript | nindent 16 }}
+                restic backup --host {{  .Values.chartReleaseSelector }}-$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)-{{.Values.context}} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}
+                {{- .Values.afterBackupScript | nindent 16 }}
+                restic forget {{ .Values.restic.forgetOptions }} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}
+                restic snapshots
+                echo "ok"
