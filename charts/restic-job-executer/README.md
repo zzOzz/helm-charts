@@ -1,6 +1,6 @@
 # restic-job-executer
 
-![Version: 0.1.1](https://img.shields.io/badge/Version-0.1.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 1.24.1](https://img.shields.io/badge/AppVersion-1.24.1-informational?style=flat-square)
+![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.14.0](https://img.shields.io/badge/AppVersion-0.14.0-informational?style=flat-square)
 
 A Helm chart for restic backup CronJob
 
@@ -98,7 +98,21 @@ string
 			<td>name of the chart release (used to select pod)</td>
 		</tr>
 		<tr>
-			<td id="suspend"><a href="./values.yaml#L15">suspend</a></td>
+			<td id="containerSelector"><a href="./values.yaml#L15">containerSelector</a></td>
+			<td>
+string
+</td>
+			<td>
+				<div style="max-width: 300px;">
+<pre lang="json">
+""
+</pre>
+</div>
+			</td>
+			<td>name of the container of the pod (used to select pod)</td>
+		</tr>
+		<tr>
+			<td id="suspend"><a href="./values.yaml#L18">suspend</a></td>
 			<td>
 bool
 </td>
@@ -112,7 +126,7 @@ false
 			<td>Suspend cronjob</td>
 		</tr>
 		<tr>
-			<td id="image"><a href="./values.yaml#L17">image</a></td>
+			<td id="image"><a href="./values.yaml#L20">image</a></td>
 			<td>
 object
 </td>
@@ -122,7 +136,7 @@ object
 {
   "pullPolicy": "IfNotPresent",
   "repository": "bitnami/kubectl",
-  "tag": ""
+  "tag": "1.24.1"
 }
 </pre>
 </div>
@@ -130,7 +144,7 @@ object
 			<td>image used for kubectl command</td>
 		</tr>
 		<tr>
-			<td id="image--repository"><a href="./values.yaml#L19">image.repository</a></td>
+			<td id="image--repository"><a href="./values.yaml#L22">image.repository</a></td>
 			<td>
 string
 </td>
@@ -144,7 +158,7 @@ string
 			<td>repo of image used for kubectl command</td>
 		</tr>
 		<tr>
-			<td id="image--pullPolicy"><a href="./values.yaml#L21">image.pullPolicy</a></td>
+			<td id="image--pullPolicy"><a href="./values.yaml#L24">image.pullPolicy</a></td>
 			<td>
 string
 </td>
@@ -158,21 +172,21 @@ string
 			<td>pullPolicy of image used for kubectl command</td>
 		</tr>
 		<tr>
-			<td id="image--tag"><a href="./values.yaml#L23">image.tag</a></td>
+			<td id="image--tag"><a href="./values.yaml#L26">image.tag</a></td>
 			<td>
 string
 </td>
 			<td>
 				<div style="max-width: 300px;">
 <pre lang="json">
-""
+"1.24.1"
 </pre>
 </div>
 			</td>
 			<td>tag of image used for kubectl command</td>
 		</tr>
 		<tr>
-			<td id="restic--bunzip2DownloadUrl"><a href="./values.yaml#L27">restic.bunzip2DownloadUrl</a></td>
+			<td id="restic--bunzip2DownloadUrl"><a href="./values.yaml#L30">restic.bunzip2DownloadUrl</a></td>
 			<td>
 string
 </td>
@@ -186,21 +200,21 @@ string
 			<td>bzip2 download url to extract restic binary</td>
 		</tr>
 		<tr>
-			<td id="restic--downloadUrl"><a href="./values.yaml#L29">restic.downloadUrl</a></td>
+			<td id="restic--downloadUrl"><a href="./values.yaml#L32">restic.downloadUrl</a></td>
 			<td>
 string
 </td>
 			<td>
 				<div style="max-width: 300px;">
 <pre lang="json">
-"https://github.com/restic/restic/releases/download/v0.13.1/restic_0.13.1_linux_amd64.bz2"
+"https://github.com/restic/restic/releases/download/v{{.Chart.AppVersion}}/restic_{{.Chart.AppVersion}}_linux_amd64.bz2"
 </pre>
 </div>
 			</td>
 			<td>restic download url to install binary if not present</td>
 		</tr>
 		<tr>
-			<td id="restic--repository"><a href="./values.yaml#L31">restic.repository</a></td>
+			<td id="restic--repository"><a href="./values.yaml#L34">restic.repository</a></td>
 			<td>
 string
 </td>
@@ -214,7 +228,7 @@ string
 			<td>repo location of restic backup</td>
 		</tr>
 		<tr>
-			<td id="restic--password"><a href="./values.yaml#L33">restic.password</a></td>
+			<td id="restic--password"><a href="./values.yaml#L36">restic.password</a></td>
 			<td>
 string
 </td>
@@ -228,7 +242,7 @@ string
 			<td>password of restic backup</td>
 		</tr>
 		<tr>
-			<td id="restic--awsAccessKeyId"><a href="./values.yaml#L35">restic.awsAccessKeyId</a></td>
+			<td id="restic--awsAccessKeyId"><a href="./values.yaml#L38">restic.awsAccessKeyId</a></td>
 			<td>
 string
 </td>
@@ -242,7 +256,7 @@ string
 			<td>s3 config access for restic backup</td>
 		</tr>
 		<tr>
-			<td id="restic--awsSecretAccessKey"><a href="./values.yaml#L37">restic.awsSecretAccessKey</a></td>
+			<td id="restic--awsSecretAccessKey"><a href="./values.yaml#L40">restic.awsSecretAccessKey</a></td>
 			<td>
 string
 </td>
@@ -256,7 +270,7 @@ string
 			<td>s3 config access for restic backup</td>
 		</tr>
 		<tr>
-			<td id="restic--forgetOptions"><a href="./values.yaml#L39">restic.forgetOptions</a></td>
+			<td id="restic--forgetOptions"><a href="./values.yaml#L42">restic.forgetOptions</a></td>
 			<td>
 string
 </td>
@@ -270,7 +284,7 @@ string
 			<td>restic forget options</td>
 		</tr>
 		<tr>
-			<td id="restic--backupOptions"><a href="./values.yaml#L41">restic.backupOptions</a></td>
+			<td id="restic--backupOptions"><a href="./values.yaml#L44">restic.backupOptions</a></td>
 			<td>
 string
 </td>
@@ -284,7 +298,21 @@ string
 			<td>restic backup options</td>
 		</tr>
 		<tr>
-			<td id="beforeBackupScript"><a href="./values.yaml#L44">beforeBackupScript</a></td>
+			<td id="customBackupCommand"><a href="./values.yaml#L47">customBackupCommand</a></td>
+			<td>
+string
+</td>
+			<td>
+				<div style="max-width: 300px;">
+<pre lang="json">
+""
+</pre>
+</div>
+			</td>
+			<td>custom backup command</td>
+		</tr>
+		<tr>
+			<td id="beforeBackupScript"><a href="./values.yaml#L50">beforeBackupScript</a></td>
 			<td>
 string
 </td>
@@ -298,7 +326,7 @@ string
 			<td>script executed before backup (do not forget \ before $ if bash variables used)</td>
 		</tr>
 		<tr>
-			<td id="afterBackupScript"><a href="./values.yaml#L48">afterBackupScript</a></td>
+			<td id="afterBackupScript"><a href="./values.yaml#L54">afterBackupScript</a></td>
 			<td>
 string
 </td>
@@ -312,7 +340,7 @@ string
 			<td>script executed after backup (do not forget \ before $ if bash variables used)</td>
 		</tr>
 		<tr>
-			<td id="imagePullSecrets"><a href="./values.yaml#L50">imagePullSecrets</a></td>
+			<td id="imagePullSecrets"><a href="./values.yaml#L56">imagePullSecrets</a></td>
 			<td>
 list
 </td>
@@ -326,7 +354,7 @@ list
 			<td></td>
 		</tr>
 		<tr>
-			<td id="nameOverride"><a href="./values.yaml#L51">nameOverride</a></td>
+			<td id="nameOverride"><a href="./values.yaml#L57">nameOverride</a></td>
 			<td>
 string
 </td>
@@ -340,7 +368,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="fullnameOverride"><a href="./values.yaml#L52">fullnameOverride</a></td>
+			<td id="fullnameOverride"><a href="./values.yaml#L58">fullnameOverride</a></td>
 			<td>
 string
 </td>
@@ -354,7 +382,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--create"><a href="./values.yaml#L56">serviceAccount.create</a></td>
+			<td id="serviceAccount--create"><a href="./values.yaml#L62">serviceAccount.create</a></td>
 			<td>
 bool
 </td>
@@ -368,7 +396,7 @@ true
 			<td>Specifies whether a service account should be created</td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--annotations"><a href="./values.yaml#L58">serviceAccount.annotations</a></td>
+			<td id="serviceAccount--annotations"><a href="./values.yaml#L64">serviceAccount.annotations</a></td>
 			<td>
 object
 </td>
@@ -382,7 +410,7 @@ object
 			<td>Annotations to add to the service account</td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--name"><a href="./values.yaml#L61">serviceAccount.name</a></td>
+			<td id="serviceAccount--name"><a href="./values.yaml#L67">serviceAccount.name</a></td>
 			<td>
 string
 </td>
@@ -396,7 +424,7 @@ string
 			<td>The name of the service account to use. If not set and create is true, a name is generated using the fullname template</td>
 		</tr>
 		<tr>
-			<td id="podAnnotations"><a href="./values.yaml#L63">podAnnotations</a></td>
+			<td id="podAnnotations"><a href="./values.yaml#L69">podAnnotations</a></td>
 			<td>
 object
 </td>
@@ -410,7 +438,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="podSecurityContext"><a href="./values.yaml#L65">podSecurityContext</a></td>
+			<td id="podSecurityContext"><a href="./values.yaml#L71">podSecurityContext</a></td>
 			<td>
 object
 </td>
@@ -424,7 +452,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="securityContext"><a href="./values.yaml#L68">securityContext</a></td>
+			<td id="securityContext"><a href="./values.yaml#L74">securityContext</a></td>
 			<td>
 object
 </td>
@@ -438,7 +466,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="resources"><a href="./values.yaml#L76">resources</a></td>
+			<td id="resources"><a href="./values.yaml#L82">resources</a></td>
 			<td>
 object
 </td>
@@ -452,7 +480,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="nodeSelector"><a href="./values.yaml#L88">nodeSelector</a></td>
+			<td id="nodeSelector"><a href="./values.yaml#L94">nodeSelector</a></td>
 			<td>
 object
 </td>
@@ -466,7 +494,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="tolerations"><a href="./values.yaml#L90">tolerations</a></td>
+			<td id="tolerations"><a href="./values.yaml#L96">tolerations</a></td>
 			<td>
 list
 </td>
@@ -480,7 +508,7 @@ list
 			<td></td>
 		</tr>
 		<tr>
-			<td id="affinity"><a href="./values.yaml#L92">affinity</a></td>
+			<td id="affinity"><a href="./values.yaml#L98">affinity</a></td>
 			<td>
 object
 </td>
