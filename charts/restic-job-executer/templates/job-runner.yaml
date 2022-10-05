@@ -28,13 +28,13 @@ spec:
           - name: {{ .Chart.Name }}
             securityContext:
               {{- toYaml .Values.securityContext | nindent 16 }}
-            image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+            image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             imagePullPolicy: {{ .Values.image.pullPolicy }}
             command:
             - /bin/bash
             args:
             - -c
-            - echo "bash -c \"export $(echo $ENVFILE|grep -v '^#'| xargs); $(JOB_SCRIPT)\"" |sed -z 's/\n/;/g' > /tmp/command.sh && cat /tmp/command.sh | xargs kubectl exec $(kubectl get pods --selector=$SELECTOR -o jsonpath='{.items[0].metadata.name}') --
+            - echo "bash -c \"export $(echo $ENVFILE|grep -v '^#'| xargs); $(JOB_SCRIPT)\"" |sed -z 's/\n/;/g' > /tmp/command.sh && cat /tmp/command.sh | xargs kubectl exec $(kubectl get pods --selector=$SELECTOR -o jsonpath='{.items[0].metadata.name}') {{- if .Values.containerSelector }} -c {{ .Values.containerSelector }} {{- end}} --
             env:
             - name: SELECTOR
               value: app.kubernetes.io/instance={{.Values.chartReleaseSelector}},app.kubernetes.io/name={{.Values.chartSelector}}
@@ -48,11 +48,15 @@ spec:
                 AWS_SECRET_ACCESS_KEY={{.Values.restic.awsSecretAccessKey}}
             - name: JOB_SCRIPT
               value: |-
-                export PATH=\$PATH:/tmp/bin 
-                type -P restic || ( mkdir -p /tmp/bin && curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} && chmod +x /tmp/bin/bunzip2 && curl -L {{.Values.restic.downloadUrl}} -o - | /tmp/bin/bunzip2 > /tmp/bin/restic && chmod +x /tmp/bin/restic )
+                export PATH=\$PATH:/tmp/bin
+                {{- if .Values.customBackupCommand }}
+                {{- include "common.tplvalues.render" (dict "value" .Values.customBackupCommand "context" $) | nindent 16 }}
+                {{- else }}
+                type -P restic || ( mkdir -p /tmp/bin && curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} && chmod +x /tmp/bin/bunzip2 && curl -L {{ include "common.tplvalues.render" (dict "value" .Values.restic.downloadUrl "context" $) }} -o - | /tmp/bin/bunzip2 > /tmp/bin/restic && chmod +x /tmp/bin/restic )
                 {{- .Values.beforeBackupScript | nindent 16 }}
                 restic backup --host {{  .Values.chartReleaseSelector }}-$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)-{{.Values.context}} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}
                 {{- .Values.afterBackupScript | nindent 16 }}
                 restic forget {{ .Values.restic.forgetOptions }} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}
                 restic snapshots
                 echo "ok"
+                {{- end }}

@@ -11,6 +11,9 @@ context: context-tag
 chartSelector: wordpress
 # -- name of the chart release (used to select pod)
 chartReleaseSelector: my_site_release
+# -- name of the container of the pod (used to select pod)
+containerSelector: ""
+
 # -- Suspend cronjob
 suspend: false
 # -- image used for kubectl command
@@ -20,13 +23,13 @@ image:
   # -- pullPolicy of image used for kubectl command
   pullPolicy: IfNotPresent
   # -- tag of image used for kubectl command
-  tag: ""
+  tag: "1.24.1"
 # Configure the restic command
 restic:
   # -- bzip2 download url to extract restic binary
   bunzip2DownloadUrl: https://busybox.net/downloads/binaries/1.35.0-x86_64-linux-musl/busybox_BUNZIP2
   # -- restic download url to install binary if not present
-  downloadUrl: https://github.com/restic/restic/releases/download/v0.13.1/restic_0.13.1_linux_amd64.bz2
+  downloadUrl: https://github.com/restic/restic/releases/download/v{{.Chart.AppVersion}}/restic_{{.Chart.AppVersion}}_linux_amd64.bz2
   # -- repo location of restic backup
   repository: s3:s3.amazonaws.com/bucket_name/restic
   # -- password of restic backup
@@ -39,6 +42,9 @@ restic:
   forgetOptions: "--keep-last 7 --keep-weekly 5 --prune"
   # -- restic backup options
   backupOptions: "--exclude=/bitnami/wordpress/bin --exclude=/bitnami/wordpress/wp-content/updraft/ /bitnami/wordpress"
+
+# -- custom backup command
+customBackupCommand: ""
 
 # -- script executed before backup (do not forget \ before $ if bash variables used)
 beforeBackupScript: |-
