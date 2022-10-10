@@ -56,7 +56,9 @@ afterBackupScript: |-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
+# extraEnvFile: |-
+#  FOO=bar
+#  FOOT=bart
 serviceAccount:
   # -- Specifies whether a service account should be created
   create: true

@@ -46,6 +46,9 @@ spec:
                 RESTIC_CACHE_DIR=/tmp/restic
                 AWS_ACCESS_KEY_ID={{.Values.restic.awsAccessKeyId}}
                 AWS_SECRET_ACCESS_KEY={{.Values.restic.awsSecretAccessKey}}
+                {{- if .Values.extraEnvFile }}
+                {{- .Values.extraEnvFile | nindent 16 }}
+                {{- end }}
             - name: JOB_SCRIPT
               value: |-
                 export PATH=\$PATH:/tmp/bin
