@@ -1,6 +1,6 @@
 # restic-job-executer
 
-![Version: 0.1.2](https://img.shields.io/badge/Version-0.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.14.0](https://img.shields.io/badge/AppVersion-0.14.0-informational?style=flat-square)
+![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.14.0](https://img.shields.io/badge/AppVersion-0.14.0-informational?style=flat-square)
 
 A Helm chart for restic backup CronJob
 
@@ -382,7 +382,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--create"><a href="./values.yaml#L62">serviceAccount.create</a></td>
+			<td id="serviceAccount--create"><a href="./values.yaml#L64">serviceAccount.create</a></td>
 			<td>
 bool
 </td>
@@ -396,7 +396,7 @@ true
 			<td>Specifies whether a service account should be created</td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--annotations"><a href="./values.yaml#L64">serviceAccount.annotations</a></td>
+			<td id="serviceAccount--annotations"><a href="./values.yaml#L66">serviceAccount.annotations</a></td>
 			<td>
 object
 </td>
@@ -410,7 +410,7 @@ object
 			<td>Annotations to add to the service account</td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--name"><a href="./values.yaml#L67">serviceAccount.name</a></td>
+			<td id="serviceAccount--name"><a href="./values.yaml#L69">serviceAccount.name</a></td>
 			<td>
 string
 </td>
@@ -424,7 +424,7 @@ string
 			<td>The name of the service account to use. If not set and create is true, a name is generated using the fullname template</td>
 		</tr>
 		<tr>
-			<td id="podAnnotations"><a href="./values.yaml#L69">podAnnotations</a></td>
+			<td id="podAnnotations"><a href="./values.yaml#L71">podAnnotations</a></td>
 			<td>
 object
 </td>
@@ -438,7 +438,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="podSecurityContext"><a href="./values.yaml#L71">podSecurityContext</a></td>
+			<td id="podSecurityContext"><a href="./values.yaml#L73">podSecurityContext</a></td>
 			<td>
 object
 </td>
@@ -452,7 +452,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="securityContext"><a href="./values.yaml#L74">securityContext</a></td>
+			<td id="securityContext"><a href="./values.yaml#L76">securityContext</a></td>
 			<td>
 object
 </td>
@@ -466,7 +466,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="resources"><a href="./values.yaml#L82">resources</a></td>
+			<td id="resources"><a href="./values.yaml#L84">resources</a></td>
 			<td>
 object
 </td>
@@ -480,7 +480,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="nodeSelector"><a href="./values.yaml#L94">nodeSelector</a></td>
+			<td id="nodeSelector"><a href="./values.yaml#L96">nodeSelector</a></td>
 			<td>
 object
 </td>
@@ -494,7 +494,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="tolerations"><a href="./values.yaml#L96">tolerations</a></td>
+			<td id="tolerations"><a href="./values.yaml#L98">tolerations</a></td>
 			<td>
 list
 </td>
@@ -508,7 +508,7 @@ list
 			<td></td>
 		</tr>
 		<tr>
-			<td id="affinity"><a href="./values.yaml#L98">affinity</a></td>
+			<td id="affinity"><a href="./values.yaml#L100">affinity</a></td>
 			<td>
 object
 </td>
