@@ -1,6 +1,6 @@
 # restic-job-executer
 
-![Version: 0.1.3](https://img.shields.io/badge/Version-0.1.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.14.0](https://img.shields.io/badge/AppVersion-0.14.0-informational?style=flat-square)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.14.0](https://img.shields.io/badge/AppVersion-0.14.0-informational?style=flat-square)
 
 A Helm chart for restic backup CronJob
 
@@ -305,42 +305,42 @@ string
 			<td>
 				<div style="max-width: 300px;">
 <pre lang="json">
-""
+"export PATH=$PATH:/tmp/bin\ntype -P restic || ( mkdir -p /tmp/bin \u0026\u0026 curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} \u0026\u0026 chmod +x /tmp/bin/bunzip2 \u0026\u0026 curl -L {{ include \"common.tplvalues.render\" (dict \"value\" .Values.restic.downloadUrl \"context\" $) }} -o - | /tmp/bin/bunzip2 \u003e /tmp/bin/restic \u0026\u0026 chmod +x /tmp/bin/restic )\n{{ .Values.beforeBackupScript}}\nrestic backup --host {{  .Values.chartReleaseSelector }}-$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)-{{.Values.context}} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}\n{{ .Values.afterBackupScript}}\nrestic forget {{ .Values.restic.forgetOptions }} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}\nrestic snapshots\necho \"ok\""
 </pre>
 </div>
 			</td>
 			<td>custom backup command</td>
 		</tr>
 		<tr>
-			<td id="beforeBackupScript"><a href="./values.yaml#L50">beforeBackupScript</a></td>
+			<td id="beforeBackupScript"><a href="./values.yaml#L59">beforeBackupScript</a></td>
 			<td>
 string
 </td>
 			<td>
 				<div style="max-width: 300px;">
 <pre lang="json">
-"export DATE=$(date +'%m-%d-%Y-%H_%M')\nwp db export \"/bitnami/wordpress/\"\\$DATE\".sql\""
+"export DATE=$(date +'%m-%d-%Y-%H_%M')\nwp db export \"/bitnami/wordpress/$DATE.sql\""
 </pre>
 </div>
 			</td>
 			<td>script executed before backup (do not forget \ before $ if bash variables used)</td>
 		</tr>
 		<tr>
-			<td id="afterBackupScript"><a href="./values.yaml#L54">afterBackupScript</a></td>
+			<td id="afterBackupScript"><a href="./values.yaml#L63">afterBackupScript</a></td>
 			<td>
 string
 </td>
 			<td>
 				<div style="max-width: 300px;">
 <pre lang="json">
-"rm \"/bitnami/wordpress/\"\\$DATE\".sql\""
+"rm \"/bitnami/wordpress/$DATE.sql\""
 </pre>
 </div>
 			</td>
 			<td>script executed after backup (do not forget \ before $ if bash variables used)</td>
 		</tr>
 		<tr>
-			<td id="imagePullSecrets"><a href="./values.yaml#L56">imagePullSecrets</a></td>
+			<td id="imagePullSecrets"><a href="./values.yaml#L65">imagePullSecrets</a></td>
 			<td>
 list
 </td>
@@ -354,7 +354,7 @@ list
 			<td></td>
 		</tr>
 		<tr>
-			<td id="nameOverride"><a href="./values.yaml#L57">nameOverride</a></td>
+			<td id="nameOverride"><a href="./values.yaml#L66">nameOverride</a></td>
 			<td>
 string
 </td>
@@ -368,7 +368,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="fullnameOverride"><a href="./values.yaml#L58">fullnameOverride</a></td>
+			<td id="fullnameOverride"><a href="./values.yaml#L67">fullnameOverride</a></td>
 			<td>
 string
 </td>
@@ -382,7 +382,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--create"><a href="./values.yaml#L64">serviceAccount.create</a></td>
+			<td id="serviceAccount--create"><a href="./values.yaml#L73">serviceAccount.create</a></td>
 			<td>
 bool
 </td>
@@ -396,7 +396,7 @@ true
 			<td>Specifies whether a service account should be created</td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--annotations"><a href="./values.yaml#L66">serviceAccount.annotations</a></td>
+			<td id="serviceAccount--annotations"><a href="./values.yaml#L75">serviceAccount.annotations</a></td>
 			<td>
 object
 </td>
@@ -410,7 +410,7 @@ object
 			<td>Annotations to add to the service account</td>
 		</tr>
 		<tr>
-			<td id="serviceAccount--name"><a href="./values.yaml#L69">serviceAccount.name</a></td>
+			<td id="serviceAccount--name"><a href="./values.yaml#L78">serviceAccount.name</a></td>
 			<td>
 string
 </td>
@@ -424,7 +424,7 @@ string
 			<td>The name of the service account to use. If not set and create is true, a name is generated using the fullname template</td>
 		</tr>
 		<tr>
-			<td id="podAnnotations"><a href="./values.yaml#L71">podAnnotations</a></td>
+			<td id="podAnnotations"><a href="./values.yaml#L80">podAnnotations</a></td>
 			<td>
 object
 </td>
@@ -438,7 +438,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="podSecurityContext"><a href="./values.yaml#L73">podSecurityContext</a></td>
+			<td id="podSecurityContext"><a href="./values.yaml#L82">podSecurityContext</a></td>
 			<td>
 object
 </td>
@@ -452,7 +452,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="securityContext"><a href="./values.yaml#L76">securityContext</a></td>
+			<td id="securityContext"><a href="./values.yaml#L85">securityContext</a></td>
 			<td>
 object
 </td>
@@ -466,7 +466,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="resources"><a href="./values.yaml#L84">resources</a></td>
+			<td id="resources"><a href="./values.yaml#L93">resources</a></td>
 			<td>
 object
 </td>
@@ -480,7 +480,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="nodeSelector"><a href="./values.yaml#L96">nodeSelector</a></td>
+			<td id="nodeSelector"><a href="./values.yaml#L105">nodeSelector</a></td>
 			<td>
 object
 </td>
@@ -494,7 +494,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="tolerations"><a href="./values.yaml#L98">tolerations</a></td>
+			<td id="tolerations"><a href="./values.yaml#L107">tolerations</a></td>
 			<td>
 list
 </td>
@@ -508,7 +508,7 @@ list
 			<td></td>
 		</tr>
 		<tr>
-			<td id="affinity"><a href="./values.yaml#L100">affinity</a></td>
+			<td id="affinity"><a href="./values.yaml#L109">affinity</a></td>
 			<td>
 object
 </td>
