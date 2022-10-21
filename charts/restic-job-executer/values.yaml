@@ -44,15 +44,24 @@ restic:
   backupOptions: "--exclude=/bitnami/wordpress/bin --exclude=/bitnami/wordpress/wp-content/updraft/ /bitnami/wordpress"
 
 # -- custom backup command
-customBackupCommand: ""
+customBackupCommand: |-
+  export PATH=$PATH:/tmp/bin
+  type -P restic || ( mkdir -p /tmp/bin && curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} && chmod +x /tmp/bin/bunzip2 && curl -L {{ include "common.tplvalues.render" (dict "value" .Values.restic.downloadUrl "context" $) }} -o - | /tmp/bin/bunzip2 > /tmp/bin/restic && chmod +x /tmp/bin/restic )
+  {{ .Values.beforeBackupScript}}
+  restic backup --host {{  .Values.chartReleaseSelector }}-$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)-{{.Values.context}} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}
+  {{ .Values.afterBackupScript}}
+  restic forget {{ .Values.restic.forgetOptions }} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}
+  restic snapshots
+  echo "ok"
+
 
 # -- script executed before backup (do not forget \ before $ if bash variables used)
 beforeBackupScript: |-
  export DATE=$(date +'%m-%d-%Y-%H_%M')
- wp db export "/bitnami/wordpress/"\$DATE".sql"
+ wp db export "/bitnami/wordpress/$DATE.sql"
 # -- script executed after backup (do not forget \ before $ if bash variables used)
 afterBackupScript: |-
- rm "/bitnami/wordpress/"\$DATE".sql"
+ rm "/bitnami/wordpress/$DATE.sql"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
