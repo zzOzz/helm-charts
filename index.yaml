@@ -3,6 +3,16 @@ entries:
   restic-job-executer:
   - apiVersion: v2
     appVersion: 0.14.0
+    created: "2022-11-16T07:43:59.486083008Z"
+    description: A Helm chart for restic backup CronJob
+    digest: 1780723286da32bcd40cb6db3e4cb15fd9edbc93b1b1522a1c67b628dcbe6501
+    name: restic-job-executer
+    type: application
+    urls:
+    - https://github.com/zzOzz/helm-charts/releases/download/restic-job-executer-0.2.1/restic-job-executer-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 0.14.0
     created: "2022-10-21T13:39:01.548012715Z"
     description: A Helm chart for restic backup CronJob
     digest: 17a9542e8c7df394f20a9810dbaf0b6920246e677ecf3cf3e228936c005666fa
