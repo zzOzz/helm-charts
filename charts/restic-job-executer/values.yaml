@@ -46,6 +46,12 @@ restic:
 # -- custom backup command
 customBackupCommand: |-
   export PATH=$PATH:/tmp/bin
+  mkdir -p /tmp/bin
+  cat <<EOF > /tmp/download_curl
+  printf 'GET %s HTTP/1.1\\r\\nHost: %s\\r\\nConnection: close\\r\\n\\r\\n' /downloads/binaries/1.35.0-x86_64-linux-musl/busybox_WGET busybox.net | openssl s_client -quiet -connect busybox.net:443 2>/dev/null| tail -n +14 > /tmp/bin/wget && chmod +x /tmp/bin/wget
+  wget https://github.com/moparisthebest/static-curl/releases/download/v7.85.0/curl-amd64 -O /tmp/bin/curl && chmod +x /tmp/bin/curl
+  EOF
+  type -P curl || source /tmp/download_curl
   type -P restic || ( mkdir -p /tmp/bin && curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} && chmod +x /tmp/bin/bunzip2 && curl -L {{ include "common.tplvalues.render" (dict "value" .Values.restic.downloadUrl "context" $) }} -o - | /tmp/bin/bunzip2 > /tmp/bin/restic && chmod +x /tmp/bin/restic )
   {{ .Values.beforeBackupScript}}
   restic backup --host {{  .Values.chartReleaseSelector }}-$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)-{{.Values.context}} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}
