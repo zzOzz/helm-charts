@@ -11,7 +11,7 @@ jobs:
 
       - name: Run helm-docs
         run: |
-          go install github.com/norwoodj/helm-docs/cmd/helm-docs
+          go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
           helm-docs --sort-values-order file
 
       - name: Commit bump
