@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "template.fullname" . }}
+  namespace: {{ include "template.namespace" .}}
+  labels:
+    app.kubernetes.io/name: {{ include "template.name" . }}
+    helm.sh/chart: {{ include "template.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "template.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "template.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      volumes:
+      - name: shared-files
+        emptyDir: {}
+      - name: data
+      #   persistentVolumeClaim:
+      #     claimName: {{ include "template.name" . }}-pvc
+      - name: config-volume
+        configMap:
+          name: {{ include "template.name" . }}-config
+      - name: secret-volume
+        secret:
+          secretName: {{ include "template.name" . }}-secret
+      imagePullSecrets:
+      - name: registry-secret
+      containers:
+      {{- range .Values.containers }}
+        - name: {{ .name }}
+          image: "{{ .image.repository }}:{{ .image.tag }}"
+          imagePullPolicy: {{ .image.pullPolicy }}
+          {{- with .lifecycle }}
+          lifecycle: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .securityContext }}
+          securityContext: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .command }}
+          command: {{ . }}
+          {{- end }}
+          {{- with .args }}
+          args: {{ . }}
+          {{- end }}
+          env:
+          {{- if .secrets }}{{- if and .secrets.environment }}
+          {{- range .secrets.environment}}
+          - name: {{ .key }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "template.name" $}}-secret
+                key: {{ .key }}
+          {{- end }}
+          {{- end }}{{- end }}
+          {{- if .configMap }}{{- if and .configMap.environment }}
+          {{- range .configMap.environment }}
+          - name: {{ .key }}
+            valueFrom:
+              configMapKeyRef:
+                name: {{ include "template.name" $}}-config
+                key: {{ .key }}
+          {{- end }}
+          {{- end }}{{- end }}
+          volumeMounts:
+          - name: shared-files
+            mountPath: /var/www/html
+          {{- range .volumeMounts }}
+          - mountPath: {{ .mountPath }}
+            name: data
+            subPath: "{{ .hostSubPath }}"
+          {{- end }}
+          {{- if .configMap }}{{- if and .configMap.mountPath }}
+          - name: config-volume
+            mountPath: "{{ .configMap.mountPath }}"
+          {{- end }}{{- end }}
+          {{- if .secrets }}{{- if and .secrets.mountPath }}
+          - name: secret-volume
+            mountPath: "{{ .secrets.mountPath }}"
+          {{- end }}{{- end }}
+          {{- if .service }}
+          ports:
+            - name: http
+              containerPort: {{ .service.port }}
+              protocol: TCP
+          livenessProbe:
+            tcpSocket:
+              port: {{ .service.port }}
+            # httpGet:
+            #   path: /
+            #   port: http
+          readinessProbe:
+            tcpSocket:
+              port: {{ .service.port }}
+            # httpGet:
+            #   path: /
+            #   port: http
+          {{- end }}
+          {{- if .resources }}
+          resources:
+            {{- toYaml .resources | nindent 12 }}
+          {{- end }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}

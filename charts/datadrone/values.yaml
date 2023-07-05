@@ -1,0 +1,174 @@
+# Default values for datadrone.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# -- containers affinity
+affinity: {}
+
+# -- list of affinitcontainers
+containers:
+- configMap:
+    files:
+    - content: |
+        events {
+        }
+        http {
+          server_tokens off;
+          sendfile on;
+          tcp_nopush on;
+          tcp_nodelay on;
+          keepalive_timeout 15;
+          types_hash_max_size 2048;
+          include /etc/nginx/mime.types;
+          default_type application/octet-stream;
+          access_log off;
+          error_log off;
+          gzip on;
+          gzip_disable "msie6";
+          include /etc/nginx/conf.d/*.conf;
+          include /etc/nginx/sites-enabled/*;
+          open_file_cache max=100;
+          server {
+            listen 80 default_server;
+            listen [::]:80 default_server;
+            # Set nginx to serve files from the shared volume!
+            root /var/www/html/public;
+            index index.php index.html;
+            server_name _;
+            location / {
+              try_files $uri /index.php$is_args$args;
+              client_max_body_size 10M;
+            }
+            location ~ ^/index\.php(/|$) {
+              fastcgi_pass 127.0.0.1:9000;
+              fastcgi_split_path_info ^(.+\.php)(/.*)$;
+              include fastcgi_params;
+              fastcgi_read_timeout 600;
+              client_max_body_size 10M;
+              fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+              fastcgi_param DOCUMENT_ROOT $realpath_root;
+              #internal;
+            }
+            location ~ \.php$ {
+              return 404;
+            }
+          }
+        }
+      name: nginx.conf
+    mountPath: /config
+  image:
+    pullPolicy: Always
+    repository: nginx
+    tag: latest
+  lifecycle:
+    postStart:
+      exec:
+        command:
+        - /bin/sh
+        - -c
+        - cat /config/nginx.conf > /etc/nginx/nginx.conf; nginx -s reload
+  name: nginx
+  resources: {}
+  securityContext:
+    capabilities:
+      add:
+      - SYS_ADMIN
+    privileged: true
+    procMount: Default
+  service:
+    port: 80
+- args:
+# -- stfp user mount location
+  - user@sftp.server.fr:/ac/lse/projets/datadrone/
+  configMap:
+    environment:
+    - key: DB_HOST
+      value: none
+# -- default application image
+  image:
+    pullPolicy: Always
+    repository: registry.msh-lse.fr/php/datadrone
+    tag: d9ed8f6f3b11e3e0eafab414bff7b251a2f0fe20
+  lifecycle:
+    postStart:
+      exec:
+        command:
+        - /bin/sh
+        - -c
+        - cp -r /app/. /var/www/html;rm -fr /var/www/html/var;chown www-data:www-data
+          /var/www/html/public
+  name: app
+  resources: {}
+  secrets:
+    environment:
+    - key: APP_SECRET
+      value: very_secret_token
+    - key: DATABASE_URL
+      value: pgsql://datadrone_user:datadrone_password@postgres-postgresql.postgres/datadrone
+    - key: IMPORT_DIR
+      value: /srv/rsync-datadrone/Data-drone/PhotosAeriennes/
+    - key: UPLOAD_DIR
+      value: /srv/uploads
+    - key: DRONE_IMPORT_DIR
+      value: /srv/rsync-datadrone/Data-drone/DonneesDrone/
+    - key: GEOSERVER_URL
+      value: https://datadrone.dev.msh-lse.fr/geoserver/csw/
+    - key: GEOSERVER_ACCESS_TOKEN_SESSION_DURATION
+      value: "300"
+    - key: GEOSERVER_ACCESS_TOKEN
+      value: even_more_very_secret_token
+    - key: GEOSERVER_LICENCE_NAME
+      value: CRAIG
+    - key: HUMANUM_DRONE_DATA_FOLDER
+      value: /srv/rsync-datadrone/Data-drone/DonneesDrone/
+    - key: DRONE_DATA_DOWNLOAD_EXPIRATION
+      value: "1"
+    - key: DRONE_DATA_DOWNLOADS_DIR
+      value: /tmp/zip/
+    files:
+    - content: httpuser:httppassword
+      name: auth
+    - content: |
+        -----BEGIN OPENSSH PRIVATE KEY-----
+        -----END OPENSSH PRIVATE KEY-----
+      name: id_ed25519
+    mountPath: /config
+  securityContext:
+    capabilities:
+      add:
+      - SYS_ADMIN
+    privileged: true
+    procMount: Default
+  volumeMounts:
+  - hostSubPath: data
+    mountPath: /app/uploads
+fullnameOverride: datadrone
+ingress:
+  annotations: null
+  enabled: true
+  hosts:
+  - host: datadrone.dev.msh-lse.fr
+    paths:
+    - /
+  tls:
+  - hosts:
+    - datadrone.dev.msh-lse.fr
+    secretName: https-certificate
+nameOverride: datadrone
+namespaceOverride: datadrone
+nodeSelector: {}
+replicaCount: 1
+secrets:
+  dockerConfig: |
+    {"registry.msh-lse.fr":{"username":"registry_login","password":"registry_password","email":"super_user@wtf.com"}}
+  registrationToken: xxxxxxxxx
+  tlsCrt: |
+    -----BEGIN CERTIFICATE-----
+    -----END CERTIFICATE-----
+  tlsKey: |
+    -----BEGIN PRIVATE KEY-----
+    -----END PRIVATE KEY-----
+storage:
+  enable: false
+  localStoragePath: /opt/local-path-provisioner/datadrone
+  node: cluster-node_name
