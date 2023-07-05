@@ -12,7 +12,7 @@ jobs:
       - name: Run helm-docs
         run: |
           go install github.com/norwoodj/helm-docs/cmd/helm-docs@latest
-          helm-docs --sort-values-order file
+          $(go env GOPATH)/bin/helm-docs --sort-values-order file
 
       - name: Commit bump
         uses: EndBug/add-and-commit@v7
