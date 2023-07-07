@@ -3,6 +3,16 @@ entries:
   datadrone:
   - apiVersion: v2
     appVersion: 2.1.3
+    created: "2023-07-07T06:55:00.15418165Z"
+    description: A Helm chart for datadrone application
+    digest: 2ce8e3e3af0eb06db0ca84d506c57bfda75a0a613d0be4307d652573c4317d2a
+    name: datadrone
+    type: application
+    urls:
+    - https://github.com/zzOzz/helm-charts/releases/download/datadrone-0.2.3/datadrone-0.2.3.tgz
+    version: 0.2.3
+  - apiVersion: v2
+    appVersion: 2.1.3
     created: "2023-07-06T06:53:00.732004095Z"
     description: A Helm chart for datadrone application
     digest: 945785ed4aa657b48a83eca6a9bebd4f28d7d0cb7a904547716973ff317e1663
@@ -12,6 +22,16 @@ entries:
     - https://github.com/zzOzz/helm-charts/releases/download/datadrone-0.2.2/datadrone-0.2.2.tgz
     version: 0.2.2
   restic-job-executer:
+  - apiVersion: v2
+    appVersion: 0.14.0
+    created: "2023-07-07T06:55:00.378226146Z"
+    description: A Helm chart for restic backup CronJob
+    digest: b73be18400c2fe6f9b175337d553950e5b68dd5ccc72e82d0879f73bfd58a54f
+    name: restic-job-executer
+    type: application
+    urls:
+    - https://github.com/zzOzz/helm-charts/releases/download/restic-job-executer-0.2.3/restic-job-executer-0.2.3.tgz
+    version: 0.2.3
   - apiVersion: v2
     appVersion: 0.14.0
     created: "2023-07-06T06:53:00.875131127Z"
@@ -82,4 +102,4 @@ entries:
     urls:
     - https://github.com/zzOzz/helm-charts/releases/download/restic-job-executer-0.1.0/restic-job-executer-0.1.0.tgz
     version: 0.1.0
-generated: "2023-07-06T06:53:00.875155527Z"
+generated: "2023-07-07T06:55:00.378287648Z"
