@@ -1,13 +1,16 @@
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: {{ include "template.name" .}}-pvc
-#   namespace: {{ include "template.namespace" .}}
-# spec:
-#   accessModes:
-#   - ReadWriteMany
-#   storageClassName: local-storage
-#   resources:
-#     requests:
-#       storage: 100Gi
-#   volumeName: {{ include "template.name" .}}-pv
+{{- if .Values.storage.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "template.name" .}}-pvc
+  namespace: {{ include "template.namespace" .}}
+spec:
+  accessModes:
+  - ReadWriteMany
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 100Gi
+  volumeName: {{ include "template.name" .}}-pv
+
+{{- end }}

@@ -88,7 +88,7 @@ containers:
   image:
     pullPolicy: Always
     repository: registry.msh-lse.fr/php/datadrone
-    tag: d9ed8f6f3b11e3e0eafab414bff7b251a2f0fe20
+    tag: 5f52b036fde6c8c752b66c66fee71622f24a67aa
   lifecycle:
     postStart:
       exec:
@@ -169,6 +169,6 @@ secrets:
     -----BEGIN PRIVATE KEY-----
     -----END PRIVATE KEY-----
 storage:
-  enable: false
+  enabled: false
   localStoragePath: /opt/local-path-provisioner/datadrone
   node: cluster-node_name

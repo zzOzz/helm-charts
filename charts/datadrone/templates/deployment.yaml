@@ -21,11 +21,13 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       volumes:
+      - name: data
+        {{- if .Values.storage.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ include "template.name" . }}-pvc
+        {{- end }}
       - name: shared-files
         emptyDir: {}
-      - name: data
-      #   persistentVolumeClaim:
-      #     claimName: {{ include "template.name" . }}-pvc
       - name: config-volume
         configMap:
           name: {{ include "template.name" . }}-config
@@ -46,10 +48,12 @@ spec:
           securityContext: {{ toYaml . | nindent 12 }}
           {{- end }}
           {{- with .command }}
-          command: {{ . }}
+          command:
+          {{- toYaml . | nindent 10 }}
           {{- end }}
           {{- with .args }}
-          args: {{ . }}
+          args: 
+          {{- toYaml . | nindent 10 }}
           {{- end }}
           env:
           {{- if .secrets }}{{- if and .secrets.environment }}
@@ -75,7 +79,7 @@ spec:
             mountPath: /var/www/html
           {{- range .volumeMounts }}
           - mountPath: {{ .mountPath }}
-            name: data
+            name: {{ .name }}
             subPath: "{{ .hostSubPath }}"
           {{- end }}
           {{- if .configMap }}{{- if and .configMap.mountPath }}
