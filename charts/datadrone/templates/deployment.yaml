@@ -37,6 +37,7 @@ spec:
       imagePullSecrets:
       - name: registry-secret
       containers:
+          {{- $values := .Values }}
       {{- range .Values.containers }}
         - name: {{ .name }}
           image: "{{ .image.repository }}:{{ .image.tag }}"
@@ -56,15 +57,15 @@ spec:
           {{- toYaml . | nindent 10 }}
           {{- end }}
           env:
-          {{- if .secrets }}{{- if and .secrets.environment }}
-          {{- range .secrets.environment}}
+          {{- with $values.secrets.containers }}
+          {{- range .environment}}
           - name: {{ .key }}
             valueFrom:
               secretKeyRef:
                 name: {{ include "template.name" $}}-secret
                 key: {{ .key }}
           {{- end }}
-          {{- end }}{{- end }}
+          {{- end }}
           {{- if .configMap }}{{- if and .configMap.environment }}
           {{- range .configMap.environment }}
           - name: {{ .key }}
