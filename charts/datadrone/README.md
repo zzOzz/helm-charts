@@ -1,6 +1,6 @@
 # datadrone
 
-![Version: 0.2.5](https://img.shields.io/badge/Version-0.2.5-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.3](https://img.shields.io/badge/AppVersion-2.1.3-informational?style=flat-square)
+![Version: 0.2.6](https://img.shields.io/badge/Version-0.2.6-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.3](https://img.shields.io/badge/AppVersion-2.1.3-informational?style=flat-square)
 
 A Helm chart for datadrone application
 
@@ -185,7 +185,8 @@ list
           "name": "id_ed25519"
         }
       ],
-      "mountPath": "/config"
+      "mountPath": "/config",
+      "name": "datadrone-secret"
     },
     "securityContext": {
       "capabilities": {
@@ -224,7 +225,7 @@ string
 			<td>stfp user mount location</td>
 		</tr>
 		<tr>
-			<td id="fullnameOverride"><a href="./values.yaml#L145">fullnameOverride</a></td>
+			<td id="fullnameOverride"><a href="./values.yaml#L146">fullnameOverride</a></td>
 			<td>
 string
 </td>
@@ -238,7 +239,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="ingress--annotations"><a href="./values.yaml#L147">ingress.annotations</a></td>
+			<td id="ingress--annotations"><a href="./values.yaml#L148">ingress.annotations</a></td>
 			<td>
 string
 </td>
@@ -252,7 +253,7 @@ null
 			<td></td>
 		</tr>
 		<tr>
-			<td id="ingress--enabled"><a href="./values.yaml#L148">ingress.enabled</a></td>
+			<td id="ingress--enabled"><a href="./values.yaml#L149">ingress.enabled</a></td>
 			<td>
 bool
 </td>
@@ -266,7 +267,7 @@ true
 			<td></td>
 		</tr>
 		<tr>
-			<td id="ingress--hosts[0]--host"><a href="./values.yaml#L150">ingress.hosts[0].host</a></td>
+			<td id="ingress--hosts[0]--host"><a href="./values.yaml#L151">ingress.hosts[0].host</a></td>
 			<td>
 string
 </td>
@@ -280,7 +281,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="ingress--hosts[0]--paths[0]"><a href="./values.yaml#L152">ingress.hosts[0].paths[0]</a></td>
+			<td id="ingress--hosts[0]--paths[0]"><a href="./values.yaml#L153">ingress.hosts[0].paths[0]</a></td>
 			<td>
 string
 </td>
@@ -294,7 +295,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="ingress--tls[0]--hosts[0]"><a href="./values.yaml#L155">ingress.tls[0].hosts[0]</a></td>
+			<td id="ingress--tls[0]--hosts[0]"><a href="./values.yaml#L156">ingress.tls[0].hosts[0]</a></td>
 			<td>
 string
 </td>
@@ -308,7 +309,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="ingress--tls[0]--secretName"><a href="./values.yaml#L156">ingress.tls[0].secretName</a></td>
+			<td id="ingress--tls[0]--secretName"><a href="./values.yaml#L157">ingress.tls[0].secretName</a></td>
 			<td>
 string
 </td>
@@ -322,7 +323,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="nameOverride"><a href="./values.yaml#L157">nameOverride</a></td>
+			<td id="nameOverride"><a href="./values.yaml#L158">nameOverride</a></td>
 			<td>
 string
 </td>
@@ -336,7 +337,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="namespaceOverride"><a href="./values.yaml#L158">namespaceOverride</a></td>
+			<td id="namespaceOverride"><a href="./values.yaml#L159">namespaceOverride</a></td>
 			<td>
 string
 </td>
@@ -350,7 +351,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="nodeSelector"><a href="./values.yaml#L159">nodeSelector</a></td>
+			<td id="nodeSelector"><a href="./values.yaml#L160">nodeSelector</a></td>
 			<td>
 object
 </td>
@@ -364,7 +365,7 @@ object
 			<td></td>
 		</tr>
 		<tr>
-			<td id="replicaCount"><a href="./values.yaml#L160">replicaCount</a></td>
+			<td id="replicaCount"><a href="./values.yaml#L161">replicaCount</a></td>
 			<td>
 int
 </td>
@@ -378,7 +379,7 @@ int
 			<td></td>
 		</tr>
 		<tr>
-			<td id="secrets--dockerConfig"><a href="./values.yaml#L162">secrets.dockerConfig</a></td>
+			<td id="secrets--dockerConfig"><a href="./values.yaml#L163">secrets.dockerConfig</a></td>
 			<td>
 string
 </td>
@@ -392,7 +393,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="secrets--registrationToken"><a href="./values.yaml#L164">secrets.registrationToken</a></td>
+			<td id="secrets--registrationToken"><a href="./values.yaml#L165">secrets.registrationToken</a></td>
 			<td>
 string
 </td>
@@ -406,7 +407,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="secrets--tlsCrt"><a href="./values.yaml#L165">secrets.tlsCrt</a></td>
+			<td id="secrets--tlsCrt"><a href="./values.yaml#L166">secrets.tlsCrt</a></td>
 			<td>
 string
 </td>
@@ -420,7 +421,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="secrets--tlsKey"><a href="./values.yaml#L168">secrets.tlsKey</a></td>
+			<td id="secrets--tlsKey"><a href="./values.yaml#L169">secrets.tlsKey</a></td>
 			<td>
 string
 </td>
@@ -434,7 +435,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="storage--enabled"><a href="./values.yaml#L172">storage.enabled</a></td>
+			<td id="storage--enabled"><a href="./values.yaml#L173">storage.enabled</a></td>
 			<td>
 bool
 </td>
@@ -448,7 +449,7 @@ false
 			<td></td>
 		</tr>
 		<tr>
-			<td id="storage--localStoragePath"><a href="./values.yaml#L173">storage.localStoragePath</a></td>
+			<td id="storage--localStoragePath"><a href="./values.yaml#L174">storage.localStoragePath</a></td>
 			<td>
 string
 </td>
@@ -462,7 +463,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="storage--node"><a href="./values.yaml#L174">storage.node</a></td>
+			<td id="storage--node"><a href="./values.yaml#L175">storage.node</a></td>
 			<td>
 string
 </td>
