@@ -1,6 +1,6 @@
 # datadrone
 
-![Version: 0.2.2](https://img.shields.io/badge/Version-0.2.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.3](https://img.shields.io/badge/AppVersion-2.1.3-informational?style=flat-square)
+![Version: 0.2.3](https://img.shields.io/badge/Version-0.2.3-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 2.1.3](https://img.shields.io/badge/AppVersion-2.1.3-informational?style=flat-square)
 
 A Helm chart for datadrone application
 
@@ -109,7 +109,7 @@ list
     "image": {
       "pullPolicy": "Always",
       "repository": "registry.msh-lse.fr/php/datadrone",
-      "tag": "d9ed8f6f3b11e3e0eafab414bff7b251a2f0fe20"
+      "tag": "5f52b036fde6c8c752b66c66fee71622f24a67aa"
     },
     "lifecycle": {
       "postStart": {
@@ -434,7 +434,7 @@ string
 			<td></td>
 		</tr>
 		<tr>
-			<td id="storage--enable"><a href="./values.yaml#L172">storage.enable</a></td>
+			<td id="storage--enabled"><a href="./values.yaml#L172">storage.enabled</a></td>
 			<td>
 bool
 </td>
