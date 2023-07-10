@@ -33,9 +33,9 @@ spec:
           name: {{ include "template.name" . }}-config
       - name: secret-volume
         secret:
-          secretName: {{ include "template.name" . }}-secret
+          secretName: {{ .Values.secrets.name }}
       imagePullSecrets:
-      - name: registry-secret
+      - name: {{ .Values.secrets.name }}
       containers:
           {{- $values := .Values }}
       {{- range .Values.containers }}
