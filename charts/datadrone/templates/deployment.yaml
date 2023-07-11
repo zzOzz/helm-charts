@@ -35,7 +35,7 @@ spec:
         secret:
           secretName: {{ .Values.secrets.name }}
       imagePullSecrets:
-      - name: {{ .Values.secrets.name }}
+      - name: registry-secret
       containers:
           {{- $values := .Values }}
       {{- range .Values.containers }}
