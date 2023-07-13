@@ -31,9 +31,11 @@ spec:
       - name: config-volume
         configMap:
           name: {{ include "template.name" . }}-config
+          defaultMode: 420
       - name: secret-volume
         secret:
           secretName: {{ .Values.secrets.name }}
+          defaultMode: 420
       imagePullSecrets:
       - name: registry-secret
       containers:
