@@ -35,7 +35,7 @@ spec:
       - name: secret-volume
         secret:
           secretName: {{ .Values.secrets.name }}
-          defaultMode: 420
+          defaultMode: 256
       imagePullSecrets:
       - name: registry-secret
       containers:
