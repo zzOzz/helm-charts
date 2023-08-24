@@ -3,6 +3,16 @@ entries:
   datadrone:
   - apiVersion: v2
     appVersion: 2.1.3
+    created: "2023-08-24T12:14:16.164561392Z"
+    description: A Helm chart for datadrone application
+    digest: 033ab0c44b1b8e60e07dcdcc70b7e2561badad97bf272988bf670b3e4d9be7d6
+    name: datadrone
+    type: application
+    urls:
+    - https://github.com/zzOzz/helm-charts/releases/download/datadrone-0.2.10/datadrone-0.2.10.tgz
+    version: 0.2.10
+  - apiVersion: v2
+    appVersion: 2.1.3
     created: "2023-07-13T07:46:53.249814487Z"
     description: A Helm chart for datadrone application
     digest: 059ddd484617cd74eda7d0fb7d7bfeb0aa747713e41c083470fa2d84ce85fa56
@@ -81,7 +91,37 @@ entries:
     urls:
     - https://github.com/zzOzz/helm-charts/releases/download/datadrone-0.2.2/datadrone-0.2.2.tgz
     version: 0.2.2
+  ntfy:
+  - apiVersion: v2
+    appVersion: v2.7.0
+    created: "2023-08-24T12:14:16.282404553Z"
+    description: A self-hosted HTTP based pub sub notification service.
+    digest: ba96a664f56b99dd4920c12d5fc894d7ddafe000e533fca99da9d6db5dbeed3d
+    home: https://github.com/zzOzz/helm-chart
+    icon: https://raw.githubusercontent.com/binwiederhier/ntfy/main/docs/static/img/ntfy.png
+    keywords:
+    - pubsub
+    - notification
+    maintainers:
+    - name: Vincent Lombard
+    name: ntfy
+    sources:
+    - https://github.com/binwiederhier/ntfy
+    type: application
+    urls:
+    - https://github.com/zzOzz/helm-charts/releases/download/ntfy-0.2.10/ntfy-0.2.10.tgz
+    version: 0.2.10
   restic-job-executer:
+  - apiVersion: v2
+    appVersion: 0.14.0
+    created: "2023-08-24T12:14:16.427597169Z"
+    description: A Helm chart for restic backup CronJob
+    digest: 90ca465cd9c3a6fbdc5f9270aca36f11a67613e9af97049b96ec07e34bada72a
+    name: restic-job-executer
+    type: application
+    urls:
+    - https://github.com/zzOzz/helm-charts/releases/download/restic-job-executer-0.2.10/restic-job-executer-0.2.10.tgz
+    version: 0.2.10
   - apiVersion: v2
     appVersion: 0.14.0
     created: "2023-07-13T07:46:53.395415394Z"
@@ -222,4 +262,4 @@ entries:
     urls:
     - https://github.com/zzOzz/helm-charts/releases/download/restic-job-executer-0.1.0/restic-job-executer-0.1.0.tgz
     version: 0.1.0
-generated: "2023-07-13T07:46:53.395769697Z"
+generated: "2023-08-24T12:14:16.427729469Z"
