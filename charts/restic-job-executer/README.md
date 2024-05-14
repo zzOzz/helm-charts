@@ -1,6 +1,6 @@
 # restic-job-executer
 
-![Version: 0.2.11](https://img.shields.io/badge/Version-0.2.11-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.14.0](https://img.shields.io/badge/AppVersion-0.14.0-informational?style=flat-square)
+![Version: 0.2.12](https://img.shields.io/badge/Version-0.2.12-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.14.0](https://img.shields.io/badge/AppVersion-0.14.0-informational?style=flat-square)
 
 A Helm chart for restic backup CronJob
 
@@ -305,7 +305,7 @@ string
 			<td>
 				<div style="max-width: 300px;">
 <pre lang="json">
-"export PATH=$PATH:/tmp/bin\nmkdir -p /tmp/bin\ncat \u003c\u003cEOF \u003e /tmp/download_curl\nprintf 'GET %s HTTP/1.1\\\\r\\\\nHost: %s\\\\r\\\\nConnection: close\\\\r\\\\n\\\\r\\\\n' /downloads/binaries/1.35.0-x86_64-linux-musl/busybox_WGET busybox.net | openssl s_client -quiet -connect busybox.net:443 2\u003e/dev/null| tail -n +14 \u003e /tmp/bin/wget \u0026\u0026 chmod +x /tmp/bin/wget\nwget https://github.com/moparisthebest/static-curl/releases/download/v7.85.0/curl-amd64 -O /tmp/bin/curl \u0026\u0026 chmod +x /tmp/bin/curl\nEOF\ntype -P curl || source /tmp/download_curl\ntype -P restic || ( mkdir -p /tmp/bin \u0026\u0026 curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} \u0026\u0026 chmod +x /tmp/bin/bunzip2 \u0026\u0026 curl -L {{ include \"common.tplvalues.render\" (dict \"value\" .Values.restic.downloadUrl \"context\" $) }} -o - | /tmp/bin/bunzip2 \u003e /tmp/bin/restic \u0026\u0026 chmod +x /tmp/bin/restic )\n{{ .Values.beforeBackupScript}}\nrestic backup --host {{  .Values.chartReleaseSelector }}-$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)-{{.Values.context}} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}\n{{ .Values.afterBackupScript}}\nrestic forget {{ .Values.restic.forgetOptions }} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}\nrestic snapshots\necho \"ok\""
+"export PATH=$PATH:/tmp/bin\nmkdir -p /tmp/bin\ncat \u003c\u003cEOF \u003e /tmp/download_curl\nprintf 'GET %s HTTP/1.1\\\\r\\\\nHost: %s\\\\r\\\\nConnection: close\\\\r\\\\n\\\\r\\\\n' /downloads/binaries/1.35.0-x86_64-linux-musl/busybox_WGET busybox.net | openssl s_client -quiet -connect busybox.net:443 2\u003e/dev/null| tail -n +14 \u003e /tmp/bin/wget \u0026\u0026 chmod +x /tmp/bin/wget\nwget https://github.com/moparisthebest/static-curl/releases/download/v7.85.0/curl-amd64 -O /tmp/bin/curl \u0026\u0026 chmod +x /tmp/bin/curl\nEOF\ntype -P curl || source /tmp/download_curl\ntype -P restic || ( mkdir -p /tmp/bin \u0026\u0026 curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} \u0026\u0026 chmod +x /tmp/bin/bunzip2 \u0026\u0026 curl -L {{ include \"common.tplvalues.render\" (dict \"value\" .Values.restic.downloadUrl \"context\" $) }} -o - | /tmp/bin/bunzip2 \u003e /tmp/bin/restic \u0026\u0026 chmod +x /tmp/bin/restic )\n{{ .Values.beforeBackupScript}}\nrestic backup --host {{  .Values.chartReleaseSelector }}-{{.Release.Namespace }}-{{.Values.context}} --tag {{.Release.Namespace }} --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}\n{{ .Values.afterBackupScript}}\nrestic forget {{ .Values.restic.forgetOptions }} --tag {{.Release.Namespace }} --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}\nrestic snapshots\necho \"ok\""
 </pre>
 </div>
 			</td>
@@ -523,3 +523,4 @@ object
 		</tr>
 	</tbody>
 </table>
+
