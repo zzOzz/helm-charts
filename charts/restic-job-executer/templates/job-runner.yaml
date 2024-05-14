@@ -40,6 +40,7 @@ spec:
               value: app.kubernetes.io/instance={{.Values.chartReleaseSelector}},app.kubernetes.io/name={{.Values.chartSelector}}
             - name: ENVFILE
               value: |-
+                NAMESPACE={{.Release.Namespace}}
                 CONTEXT={{.Values.context}}
                 RESTIC_PASSWORD={{.Values.restic.password}}
                 RESTIC_REPOSITORY={{.Values.restic.repository}}

@@ -54,9 +54,9 @@ customBackupCommand: |-
   type -P curl || source /tmp/download_curl
   type -P restic || ( mkdir -p /tmp/bin && curl -o /tmp/bin/bunzip2 {{ .Values.restic.bunzip2DownloadUrl }} && chmod +x /tmp/bin/bunzip2 && curl -L {{ include "common.tplvalues.render" (dict "value" .Values.restic.downloadUrl "context" $) }} -o - | /tmp/bin/bunzip2 > /tmp/bin/restic && chmod +x /tmp/bin/restic )
   {{ .Values.beforeBackupScript}}
-  restic backup --host {{  .Values.chartReleaseSelector }}-$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)-{{.Values.context}} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}
+  restic backup --host {{  .Values.chartReleaseSelector }}-{{.Release.Namespace }}-{{.Values.context}} --tag {{.Release.Namespace }} --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }} {{ .Values.restic.backupOptions }}
   {{ .Values.afterBackupScript}}
-  restic forget {{ .Values.restic.forgetOptions }} --tag $(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace) --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}
+  restic forget {{ .Values.restic.forgetOptions }} --tag {{.Release.Namespace }} --tag {{.Values.context}} --tag {{ .Values.chartReleaseSelector }}
   restic snapshots
   echo "ok"
 
